@@ -1,0 +1,76 @@
+{
+  "project_info": {
+    "project_number": "1081471876530",
+    "project_id": "savepet-87ea0",
+    "storage_bucket": "savepet-87ea0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1081471876530:android:af4f337bff698f1085f8ab",
+        "android_client_info": {
+          "package_name": "com.tcccesumar.savepet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1081471876530-33j6bo7r84hf5o98usjf0rnn4udsk04n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tcccesumar.savepet",
+            "certificate_hash": "52853e5560e1fea470159c7f114aeae911833629"
+          }
+        },
+        {
+          "client_id": "1081471876530-5ac736p5okfo4u1reapu9quv17rpc4vo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCuFIABs_psOO2DGgIGuxH9gyo55BbQwZs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1081471876530-5ac736p5okfo4u1reapu9quv17rpc4vo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1081471876530:android:efb84436443cb27f85f8ab",
+        "android_client_info": {
+          "package_name": "com.unicesumar.savepet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1081471876530-5ac736p5okfo4u1reapu9quv17rpc4vo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCuFIABs_psOO2DGgIGuxH9gyo55BbQwZs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1081471876530-5ac736p5okfo4u1reapu9quv17rpc4vo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
