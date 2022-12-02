@@ -28,7 +28,6 @@ import com.tcccesumar.savepet.models.Users;
 public class LikeNotificationAdapter extends RecyclerView.Adapter<LikeNotificationAdapter.ViewHolder>{
 
     String TAG = "LikeNotificationAdapter";
-
     private Context mcontext;
     private List<Notification> mNotification;
 
@@ -42,14 +41,11 @@ public class LikeNotificationAdapter extends RecyclerView.Adapter<LikeNotificati
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mcontext).inflate(R.layout.like_each_item_layout,parent,false);
         return new LikeNotificationAdapter.ViewHolder(view);
-
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
         final Notification notification = mNotification.get(position);
-
         holder.text.setText(notification.getText());
         getUserInfo(holder.profileImage,holder.usernamee,notification.getUserid());
         
@@ -64,11 +60,8 @@ public class LikeNotificationAdapter extends RecyclerView.Adapter<LikeNotificati
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if(notification.isIspost()){
-
                     Log.d(TAG, "onClick: Notification Item Clicked: Redirecting to ViewPost page");
-
                 }else {
                     Log.d(TAG, "onClick: Notification Item Clicked: Redirecting to Profile page");
                 }
@@ -82,21 +75,19 @@ public class LikeNotificationAdapter extends RecyclerView.Adapter<LikeNotificati
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-
         public ImageView profileImage;
         public ImageView postImage;
         public TextView usernamee,text;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
             profileImage = itemView.findViewById(R.id.like_each_item_user_img);
             postImage = itemView.findViewById(R.id.like_each_item_post_image);
             usernamee = itemView.findViewById(R.id.like_each_item_username);
             text = itemView.findViewById(R.id.like_each_item_comment);
-
         }
     }
+
     private void getUserInfo(final ImageView profimage, final TextView username, String publisherId){
         Log.d(TAG, "getUserInfo: Getting Profileimage,Username : UserId:"+publisherId);
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users")
@@ -111,10 +102,8 @@ public class LikeNotificationAdapter extends RecyclerView.Adapter<LikeNotificati
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
-
     }
 
     private void getPostImage(final ImageView postimg, String postid){
@@ -131,10 +120,7 @@ public class LikeNotificationAdapter extends RecyclerView.Adapter<LikeNotificati
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
-
-
     }
 }

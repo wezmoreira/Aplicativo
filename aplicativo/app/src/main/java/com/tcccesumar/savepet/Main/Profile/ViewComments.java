@@ -41,18 +41,14 @@ import com.tcccesumar.savepet.models.Users;
 public class ViewComments extends AppCompatActivity {
 
     private static final String TAG ="ViewComments" ;
-
-
     private ImageView mBackArrow;
     private EditText mComment;
     private ListView mListView;
     private TextView mpost;
     ImageView profileImage;
-
     Photo mphoto;
     ArrayList<Comments> mComments;
     Integer commentCount;
-
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseDatabase mFirebaseDatabase;
@@ -73,10 +69,7 @@ public class ViewComments extends AppCompatActivity {
             mphoto = getPhotoFromBundle();
             commentCount = getIntent().getIntExtra("commentcount",0);
             Log.d(TAG, "getPhotoFromBundle: arguments: " + mphoto);
-
             getCommentList();
-
-
         }catch (NullPointerException e){
             Log.e(TAG, "onCreateView: NullPointerException: " + e.getMessage() );
         }
@@ -94,24 +87,19 @@ public class ViewComments extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
-
-
-
     }
 
     private Photo getPhotoFromBundle() {
-
         Bundle bundle = getIntent().getExtras();
         if(bundle != null) {
             return bundle.getParcelable("Photo");
         }else{
             return null;
         }
-
     }
+
     private void closeKeyboard(){
         View view = this.getCurrentFocus();
         if(view != null){
@@ -124,12 +112,10 @@ public class ViewComments extends AppCompatActivity {
         Log.d(TAG, "addNewComment: adding new comment: " + newComment);
 
         String commentID = myRef.push().getKey();
-
         Comments comment = new Comments();
         comment.setComment(newComment);
         comment.setDate_created(getTimestamp());
         comment.setUser_id(FirebaseAuth.getInstance().getCurrentUser().getUid());
-
         //inserir no photos
         myRef.child("Photo")
                 .child(mphoto.getPhoto_id())
@@ -146,7 +132,6 @@ public class ViewComments extends AppCompatActivity {
                 .setValue(comment);
 
         addCommentNotification(comment.getComment(),mphoto.getUser_id(),mphoto.getPhoto_id());
-
     }
     private String getTimestamp(){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -159,7 +144,6 @@ public class ViewComments extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         myRef = mFirebaseDatabase.getReference();
-
         if(commentCount == 0){
             mComments.clear();
             Comments firstComment = new Comments();
@@ -171,14 +155,12 @@ public class ViewComments extends AppCompatActivity {
             setupWidgets();
         }
 
-
         myRef.child("Photo")
                 .child(mphoto.getPhoto_id())
                 .child("comments")
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
                         Log.d(TAG, "onChildAdded: child added.");
 
                         Query query = myRef
@@ -222,47 +204,37 @@ public class ViewComments extends AppCompatActivity {
 
                             @Override
                             public void onCancelled(@NonNull DatabaseError error) {
-
                             }
                         });
-
-
                     }
 
                     @Override
                     public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
                     }
 
                     @Override
                     public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
                     }
 
                     @Override
                     public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-
                     }
                 });
     }
 
     private void setupWidgets(){
-
         CommentListAdapter adapter = new CommentListAdapter(this,R.layout.layout_each_comment, mComments);
         mListView.setAdapter(adapter);
-
         mpost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!mComment.getText().toString().isEmpty()){
                     Log.d(TAG, "onClick: attempting to submit new comment.");
                     addNewComment(mComment.getText().toString());
-
                     mComment.setText("");
                     closeKeyboard();
                 }else{
@@ -271,17 +243,14 @@ public class ViewComments extends AppCompatActivity {
             }
         });
     }
+
     private void addCommentNotification(String comment , String userid , String postid){
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Notifications");
-
         HashMap<String, Object> hashMappp = new HashMap<>();
         hashMappp.put("userid", FirebaseAuth.getInstance().getCurrentUser().getUid());
         hashMappp.put("text", "Commented!"+comment);
         hashMappp.put("postid",postid);
         hashMappp.put("ispost", true);
         reference.child(userid).push().setValue(hashMappp);
-
     }
-
-
 }

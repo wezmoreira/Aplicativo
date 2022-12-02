@@ -30,7 +30,6 @@ import com.tcccesumar.savepet.models.Users;
 public class FriendsFragment extends Fragment {
 
     private static final String TAG ="FriendsFragment" ;
-
     private RecyclerView recyclerView;
     private FriendsAdapter friendsAdapter;
     private List<Users> mUser;
@@ -38,27 +37,20 @@ public class FriendsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_friends, container, false);
-
         recyclerView = view.findViewById(R.id.FragmentFriends_userList);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
         mUser = new ArrayList<>();
-
         readUsers();
-
         return view;
     }
 
     private void readUsers() {
-
         // Recuperando todos os usuários
-
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
                 for(DataSnapshot snapshot1:snapshot.getChildren()){
                     Users users = snapshot1.getValue(Users.class);
                     if(!users.getUser_id().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
@@ -67,23 +59,18 @@ public class FriendsFragment extends Fragment {
                     }
                 }
                 updateFriendList();
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
-
     }
 
     private void updateFriendList() {
-
         Log.d(TAG,"updateFriendList : Updating Friend List");
 
         friendsAdapter = new FriendsAdapter(getContext(),mUser,false);
         recyclerView.setAdapter(friendsAdapter);
-
     }
 }

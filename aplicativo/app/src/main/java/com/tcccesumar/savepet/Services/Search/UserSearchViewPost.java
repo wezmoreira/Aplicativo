@@ -41,15 +41,11 @@ import com.tcccesumar.savepet.models.Users;
 public class UserSearchViewPost extends AppCompatActivity {
 
     private static final String TAG = "UserSearchViewPost";
-
-    //widgets
     private SquareImageView mPostImage;
     private TextView mCaption, mUsername, mTimestamp,mTags,mLikes,mtotalComments;
     private ImageView mBackArrow, mComments, mHeartRed, mHeart, mProfileImage;
     String lcaption,ltags,lusername;
     private ProgressBar mProgressBar;
-
-    //vars
     Photo mPhoto;
     private Heart mheart;
     Boolean mLikedByCurrentUser;
@@ -58,16 +54,13 @@ public class UserSearchViewPost extends AppCompatActivity {
     String mLikesString = "";
     Integer Commentcount;
     private Users mCurrentUser;
-
     private GestureDetector mGestureDetector;
-
     DatabaseReference databaseReference,ref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_search_view_post);
-
         mPostImage = (SquareImageView)findViewById(R.id.UserSearchViewPost_postImage);
         mBackArrow = (ImageView)findViewById(R.id.UserSearchViewPost_back);
         mCaption = (TextView)findViewById(R.id.UserSearchViewPost_txt_caption);
@@ -80,15 +73,9 @@ public class UserSearchViewPost extends AppCompatActivity {
         mHeartRed = (ImageView)findViewById(R.id.UserSearchViewPost_img_heart_red);
         mHeart = (ImageView)findViewById(R.id.UserSearchViewPost_img_heart);
         mProfileImage = (ImageView)findViewById(R.id.UserSearchViewPost_user_img);
-        //moption = (ImageView)findViewById(R.id.UserSearchViewPost_option);
-        //msend = (ImageView)findViewById(R.id.UserSearchViewPost_img_send);
         mProgressBar = (ProgressBar)findViewById(R.id.UserSearchViewPost_ProgressBar);
-
-
         mheart = new Heart(mHeart, mHeartRed);
         mGestureDetector = new GestureDetector(UserSearchViewPost.this, new GestureListener());
-
-
 
         try{
             mPhoto = getPhotoFromBundle();
@@ -96,14 +83,12 @@ public class UserSearchViewPost extends AppCompatActivity {
             Commentcount = getIntent().getIntExtra("Commentcount",0);
             retrivingData();
             getCurrentUser();
-
         }catch (NullPointerException e){
             Log.e(TAG, "onCreateView: NullPointerException: " + e.getMessage() );
         }
     }
 
     private Photo getPhotoFromBundle() {
-
         Bundle bundle = getIntent().getExtras();
         Log.d(TAG, "getPhotoFromBundle: arguments: " + bundle.getParcelable("Photo"));
         if(bundle != null) {
@@ -111,8 +96,8 @@ public class UserSearchViewPost extends AppCompatActivity {
         }else{
             return null;
         }
-
     }
+
     private void getCurrentUser(){
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         Query query = reference
@@ -134,6 +119,7 @@ public class UserSearchViewPost extends AppCompatActivity {
             }
         });
     }
+
     public class GestureListener extends GestureDetector.SimpleOnGestureListener{
         @Override
         public boolean onDown(MotionEvent e) {
@@ -142,7 +128,6 @@ public class UserSearchViewPost extends AppCompatActivity {
 
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
-
             final DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
             Query query = reference
                     .child("Photo")
@@ -164,18 +149,15 @@ public class UserSearchViewPost extends AppCompatActivity {
                                     .child("likes")
                                     .child(keyID)
                                     .removeValue();
-///
                             reference.child("User_Photo")
                                     .child(mPhoto.getUser_id())
                                     .child(mPhoto.getPhoto_id())
                                     .child("likes")
                                     .child(keyID)
                                     .removeValue();
-
                             mheart.toggleLike();
                             getLikesString();
                         }
-                        //case2: O usuário não curtiu a foto
                         else if(!mLikedByCurrentUser){
                             addNewLike();
                             break;
@@ -188,13 +170,12 @@ public class UserSearchViewPost extends AppCompatActivity {
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-
                 }
             });
-
             return true;
         }
     }
+
     private void getLikesString(){
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         Query query = reference
@@ -206,7 +187,6 @@ public class UserSearchViewPost extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mUsers = new StringBuilder();
                 for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
-
                     DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
                     Query query = reference
                             .child("Users")
@@ -216,7 +196,6 @@ public class UserSearchViewPost extends AppCompatActivity {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
-
                                 mUsers.append(singleSnapshot.getValue(Users.class).getUsername());
                                 mUsers.append(",");
                             }
@@ -228,44 +207,36 @@ public class UserSearchViewPost extends AppCompatActivity {
                             }else{
                                 mLikedByCurrentUser = false;
                             }
-
                             int length = splitUsers.length;
                             if(length == 1){
                                 mLikesString = "Liked by " + splitUsers[0];
-
                             }
                             else if(length == 2){
                                 mLikesString = "Liked by " + splitUsers[0]
                                         + " and " + splitUsers[1];
-
                             }
                             else if(length == 3){
                                 mLikesString = "Liked by " + splitUsers[0]
                                         + ", " + splitUsers[1]
                                         + " and " + splitUsers[2];
-
                             }
                             else if(length == 4){
                                 mLikesString = "Liked by " + splitUsers[0]
                                         + ", " + splitUsers[1]
                                         + ", " + splitUsers[2]
                                         + " and " + splitUsers[3];
-
                             }
                             else if(length > 4){
                                 mLikesString = "Liked by " + splitUsers[0]
                                         + ", " + splitUsers[1]
                                         + ", " + splitUsers[2]
                                         + " and " + (splitUsers.length - 3) + " others";
-
                             }
                             setupWidgets();
-
                         }
 
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
-
                         }
                     });
                 }
@@ -278,39 +249,34 @@ public class UserSearchViewPost extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
-
     }
-    private void addNewLike(){
 
+    private void addNewLike(){
         Log.d(TAG, "addNewLike: adding new like");
 
         DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
         String newLikeID = myRef.push().getKey();
         Likes like = new Likes();
         like.setUser_id(FirebaseAuth.getInstance().getCurrentUser().getUid());
-
         myRef.child("Photo")
                 .child(mPhoto.getPhoto_id())
                 .child("likes")
                 .child(newLikeID)
                 .setValue(like);
-
         myRef.child("User_Photo")
                 .child(mPhoto.getUser_id())
                 .child(mPhoto.getPhoto_id())
                 .child("likes")
                 .child(newLikeID)
                 .setValue(like);
-
         mheart.toggleLike();
         getLikesString();
         addLikeNotification(mPhoto.getUser_id(),mPhoto.getPhoto_id());
     }
-    private String getTimestampDifference(){
 
+    private String getTimestampDifference(){
         String difference = "";
         Calendar c = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -327,6 +293,7 @@ public class UserSearchViewPost extends AppCompatActivity {
         }
         return difference;
     }
+
     private void setupWidgets(){
         String timestampDiff = getTimestampDifference();
         if(!timestampDiff.equals("0")){
@@ -345,13 +312,11 @@ public class UserSearchViewPost extends AppCompatActivity {
             }
         }catch (NullPointerException e){
             Log.e(TAG, "SetupWidget: NullPointerException: " + e.getMessage() );
-
         }
 
         mtotalComments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Log.d(TAG, "onClick: navigating to comments through text");
 
                 Intent b = new Intent(UserSearchViewPost.this, ViewComments.class);
@@ -360,7 +325,6 @@ public class UserSearchViewPost extends AppCompatActivity {
                 b.putExtra("commentcount",Commentcount);
                 b.putExtras(bundle);
                 startActivity(b);
-
             }
         });
 
@@ -375,7 +339,6 @@ public class UserSearchViewPost extends AppCompatActivity {
                 b.putExtras(bundle);
                 b.putExtra("commentcount",Commentcount);
                 startActivity(b);
-
             }
         });
 
@@ -400,8 +363,8 @@ public class UserSearchViewPost extends AppCompatActivity {
             });
         }
     }
-    private void retrivingData(){
 
+    private void retrivingData(){
         String userid = mPhoto.getUser_id();
         databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userid);
         ref = FirebaseDatabase.getInstance().getReference("User_Photo").child(userid).child(mPhoto.getPhoto_id());
@@ -412,35 +375,28 @@ public class UserSearchViewPost extends AppCompatActivity {
                 Glide.with(UserSearchViewPost.this)
                         .load(user.getProfilePhoto())
                         .into(mProfileImage);
-
                 lcaption = mPhoto.getCaption();
                 ltags = mPhoto.getTags();
                 lusername = user.getUsername();
-
                 mTags.setText(ltags);
                 mUsername.setText(lusername);
                 mProgressBar.setVisibility(View.GONE);
-
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
 
     }
+
     private void addLikeNotification(String userid,String postid){
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Notifications");
-
         HashMap<String, Object> hashMappp = new HashMap<>();
         hashMappp.put("userid", FirebaseAuth.getInstance().getCurrentUser().getUid());
         hashMappp.put("postid", postid);
         hashMappp.put("text", "curtiu seu post");
         hashMappp.put("ispost", true);
         reference.child(userid).push().setValue(hashMappp);
-
     }
-
 }

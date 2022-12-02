@@ -57,10 +57,7 @@ public class EditProfile extends AppCompatActivity {
         Phonenumber = (TextView)findViewById(R.id.phonenumber);
         Gender = (TextView)findViewById(R.id.gender);
         Birth = (TextView)findViewById(R.id.birth);
-
-
         storageReference = FirebaseStorage.getInstance().getReference();
-
 
 //******************************RECUPERANDO DADOS***************************
         final String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -76,12 +73,10 @@ public class EditProfile extends AppCompatActivity {
                 Glide.with(EditProfile.this)
                         .load(user.getProfilePhoto())
                         .into(mProfilePhoto);
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
         FirebaseDatabase.getInstance().getReference("Privatedetails")
@@ -97,11 +92,9 @@ public class EditProfile extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
 //************************************************************************
-
 
         mProfilePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,9 +106,6 @@ public class EditProfile extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-
                 Name = name.getText().toString().trim();
                 Username = username.getText().toString().trim();
                 Bio = bio.getText().toString().trim();
@@ -143,7 +133,6 @@ public class EditProfile extends AppCompatActivity {
                                     data.child("website").setValue(Website);
                                     // Set foto de perfil
                                     if (imageUri != null) {
-
                                         reff = storageReference.child("photos/users/"+"/"+useridd+"/profilephoto");
                                         reff.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
 
@@ -153,44 +142,33 @@ public class EditProfile extends AppCompatActivity {
                                                     @Override
                                                     public void onSuccess(Uri uri) {
                                                         data.child("profilePhoto").setValue(uri.toString());
-
-
                                                     }
                                                 });
-
                                             }
                                         });
-
                                     }
-
 
                                     mDialog.dismiss();
                                     Toast.makeText(EditProfile.this, "Perfil atualizado com sucesso!", Toast.LENGTH_SHORT).show();
                                     startActivity(new Intent(EditProfile.this,Account_Settings.class));
                                     finish();
-
                                 }
 
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError error) {
-
                                 }
                             });
-
-
                         }
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-
                     }
                 });
-
             }
         });
-
     }
+
     private void openFileChooser() {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -205,9 +183,7 @@ public class EditProfile extends AppCompatActivity {
                 && data != null && data.getData() != null){
             imageUri = data.getData();
             mProfilePhoto.setImageURI(imageUri);
-
         }
-
         super.onActivityResult(requestCode, resultCode, data);
     }
 }

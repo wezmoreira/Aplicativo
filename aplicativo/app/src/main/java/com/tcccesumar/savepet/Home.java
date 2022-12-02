@@ -29,19 +29,16 @@ public class Home extends AppCompatActivity implements BottomNavigationView.OnNa
         String name = getIntent().getStringExtra("PAGE");
         if (name != null){
             loadfragment(new HomeFragment());
-
         }else{
             loadfragment(new HomeFragment());
-
         }
-
     }
+
     private boolean loadfragment(Fragment fragment) {
         if (fragment != null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
             return true;
         }
-
         return false;
     }
 
@@ -52,11 +49,9 @@ public class Home extends AppCompatActivity implements BottomNavigationView.OnNa
             case R.id.Home:
                 fragment = new HomeFragment();
                 break;
-
             case R.id.search:
                 fragment = new SearchFragment();
                 break;
-
             case R.id.post:
                 fragment = null;
                 startActivity(new Intent(Home.this, PostActivity.class));
@@ -84,6 +79,4 @@ public class Home extends AppCompatActivity implements BottomNavigationView.OnNa
                 .setNegativeButton("Não", null)
                 .show();
     }
-
-
 }

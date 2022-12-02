@@ -41,7 +41,6 @@ public class UserSearchProfileActivity extends AppCompatActivity {
 
     private static final String TAG ="UserSearchActivity" ;
     private static final int NUM_GRID_COLUMNS = 3;
-
     String searchedUserId;
     Button Follow,Following,Message;
     ImageView profilePhoto;
@@ -56,10 +55,8 @@ public class UserSearchProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_search_profile);
-
         searchedUserId = getIntent().getStringExtra("SearchedUserid");
         Log.d(TAG, "Item Clicked Getting UID "+searchedUserId);
-
         Follow = (Button)findViewById(R.id.UserSearchProfile_Followbtn);
         Following = (Button)findViewById(R.id.UserSearchProfile_Followingbtn);
         Message = (Button)findViewById(R.id.UserSearchProfile_messages);
@@ -74,15 +71,12 @@ public class UserSearchProfileActivity extends AppCompatActivity {
         username = (TextView)findViewById(R.id.UserSearchProfile_profileName);
         follower = (LinearLayout)findViewById(R.id.UserSearchProfile_noFollowers);
         following = (LinearLayout)findViewById(R.id.UserSearchProfile_noFollowing);
-
         mProgressBar = (ProgressBar)findViewById(R.id.UserSearchProfile_ProgressBar);
-
         RetrivingGeneralData();
 
         Follow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Log.d(TAG, "onClick: Follow: " + searchedUserId);
 
                 FirebaseDatabase.getInstance().getReference()
@@ -91,7 +85,6 @@ public class UserSearchProfileActivity extends AppCompatActivity {
                         .child(searchedUserId)
                         .child("user_id")
                         .setValue(searchedUserId);
-
                 FirebaseDatabase.getInstance().getReference()
                         .child("Followers")
                         .child(searchedUserId)
@@ -102,13 +95,11 @@ public class UserSearchProfileActivity extends AppCompatActivity {
                 increaseFollowers();
                 increaseFollowing();
                 addFollowNotification(searchedUserId);
-
             }
         });
         Following.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Log.d(TAG, "onClick: Following: " + searchedUserId);
 
                 FirebaseDatabase.getInstance().getReference()
@@ -116,7 +107,6 @@ public class UserSearchProfileActivity extends AppCompatActivity {
                         .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                         .child(searchedUserId)
                         .removeValue();
-
                 FirebaseDatabase.getInstance().getReference()
                         .child("Followers")
                         .child(searchedUserId)
@@ -125,25 +115,17 @@ public class UserSearchProfileActivity extends AppCompatActivity {
                 setUnfollowing();
                 decreaseFollowers();
                 decreaseFollowing();
-
             }
         });
-
-
-
     }
 
     private void RetrivingGeneralData(){
-
         if(searchedUserId.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
-
             Follow.setVisibility(View.GONE);
             Message.setVisibility(View.GONE);
             Following.setVisibility(View.GONE);
             dataretrive();
             tempGridSetup();
-
-
         }else{
             dataretrive();
             tempGridSetup();
@@ -151,11 +133,9 @@ public class UserSearchProfileActivity extends AppCompatActivity {
         }
         dataretrive();
         tempGridSetup();
-
     }
 
     private void dataretrive(){
-
         databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(searchedUserId);
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -178,7 +158,6 @@ public class UserSearchProfileActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
 
@@ -191,13 +170,11 @@ public class UserSearchProfileActivity extends AppCompatActivity {
         follower.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(UserSearchProfileActivity.this, FollowersFollowing.class);
                 intent.putExtra("id",searchedUserId);
                 intent.putExtra("title","Followers");
                 intent.putExtra("number",noFollowers);
                 startActivity(intent);
-
             }
         });
 
@@ -209,7 +186,6 @@ public class UserSearchProfileActivity extends AppCompatActivity {
                 intent.putExtra("title","Following");
                 intent.putExtra("number",noFollowings);
                 startActivity(intent);
-
             }
         });
 
@@ -219,7 +195,6 @@ public class UserSearchProfileActivity extends AppCompatActivity {
         Query query = reference
                 .child("User_Photo")
                 .child(searchedUserId);
-
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -271,7 +246,6 @@ public class UserSearchProfileActivity extends AppCompatActivity {
                 gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                         Log.d(TAG, "Item Clicked Getting Bundle "+photos.get(position));
                         Intent intent=new Intent(UserSearchProfileActivity.this, UserSearchViewPost.class);
                         intent.putExtra("SearchedUserPhoto",photos.get(position));
@@ -285,7 +259,6 @@ public class UserSearchProfileActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.d(TAG, "onCancelled: query cancelled.");
-
             }
         });
     }
@@ -305,7 +278,6 @@ public class UserSearchProfileActivity extends AppCompatActivity {
     private void isFollowing(){
         Log.d(TAG, "isFollowing: checking if following this users.");
         setUnfollowing();
-
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         Query query = reference.child("Following")
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
@@ -315,18 +287,14 @@ public class UserSearchProfileActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
                     Log.d(TAG, "onDataChange: found user:" + singleSnapshot.getValue());
-
                     setFollowing();
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
-
-
     }
 
     public void increaseFollowing(){
@@ -339,18 +307,14 @@ public class UserSearchProfileActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String postCount = Integer.toString(Integer.parseInt(snapshot.child("following").getValue().toString()) + 1);
                 data.child("following").setValue(postCount);
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
-
-
-
     }
+
     public void decreaseFollowing(){
         Log.d(TAG, "decreaseFollowing: decreasing Following Count");
 
@@ -361,18 +325,15 @@ public class UserSearchProfileActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String postCount = Integer.toString(Integer.parseInt(snapshot.child("following").getValue().toString()) - 1);
                 data.child("following").setValue(postCount);
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
 
-
-
     }
+
     public void increaseFollowers(){
         Log.d(TAG, "increaseFollowers: increasing Followers Count");
 
@@ -383,18 +344,14 @@ public class UserSearchProfileActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String postCount = Integer.toString(Integer.parseInt(snapshot.child("followers").getValue().toString()) + 1);
                 data.child("followers").setValue(postCount);
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
-
-
-
     }
+
     public void decreaseFollowers(){
         Log.d(TAG, "decreaseFollowers: decreasing Followers Count");
 
@@ -405,30 +362,21 @@ public class UserSearchProfileActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String postCount = Integer.toString(Integer.parseInt(snapshot.child("followers").getValue().toString()) - 1);
                 data.child("followers").setValue(postCount);
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
-
-
-
     }
 
     private void addFollowNotification(String userid){
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Notifications");
-
         HashMap<String, Object> hashMappp = new HashMap<>();
         hashMappp.put("userid", FirebaseAuth.getInstance().getCurrentUser().getUid());
         hashMappp.put("text", "começou a seguir você");
         hashMappp.put("postid", "");
         hashMappp.put("ispost", false);
         reference.child(userid).push().setValue(hashMappp);
-
     }
-
-
 }

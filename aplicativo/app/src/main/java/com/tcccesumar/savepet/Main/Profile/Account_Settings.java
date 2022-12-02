@@ -17,12 +17,10 @@ public class Account_Settings extends AppCompatActivity {
 
     TextView editProfile,logout;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account__settings);
-
         editProfile = (TextView)findViewById(R.id.edit_profile);
         logout = (TextView)findViewById(R.id.logout);
 
@@ -52,7 +50,5 @@ public class Account_Settings extends AppCompatActivity {
                         .show();
             }
         });
-
-
     }
 }

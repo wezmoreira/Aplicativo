@@ -46,7 +46,6 @@ public class ProfileFragment extends Fragment {
 
     private static final int NUM_GRID_COLUMNS = 3;
     private static final String TAG ="ProfileFragment" ;
-
     ImageView account_setting_menu;
     Button editProfile;
     ImageView profilePhoto;
@@ -61,7 +60,6 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_profile,null);
-
         account_setting_menu = (ImageView) v.findViewById(R.id.account_settingMenu);
         editProfile = (Button)v.findViewById(R.id.edit_profile);
         profilePhoto = (ImageView)v.findViewById(R.id.user_img);
@@ -76,10 +74,8 @@ public class ProfileFragment extends Fragment {
         follower = (LinearLayout)v.findViewById(R.id.FragmentProfile_followerLinearLayout);
         following = (LinearLayout)v.findViewById(R.id.FragmentProfile_followingLinearLayout);
         mProgressBar = (ProgressBar) v.findViewById(R.id.profileProgressBar);
-
         // Recuperando fotos e exibindo no perfil
         tempGridSetup();
-
         // Recuperando dados
         String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userid);
@@ -105,11 +101,8 @@ public class ProfileFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
-
-
 
         account_setting_menu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,13 +122,11 @@ public class ProfileFragment extends Fragment {
         follower.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(getContext(),FollowersFollowing.class);
                 intent.putExtra("id",FirebaseAuth.getInstance().getCurrentUser().getUid());
                 intent.putExtra("title","Followers");
                 intent.putExtra("number",noFollowers);
                 startActivity(intent);
-
             }
         });
 
@@ -147,12 +138,8 @@ public class ProfileFragment extends Fragment {
                 intent.putExtra("title","Following");
                 intent.putExtra("number",noFollowings);
                 startActivity(intent);
-
             }
         });
-
-
-
         return v;
     }
 
@@ -164,7 +151,6 @@ public class ProfileFragment extends Fragment {
         Query query = reference
                 .child("User_Photo")
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -172,8 +158,6 @@ public class ProfileFragment extends Fragment {
                     Photo photo = new Photo();
                     Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
                     Log.d(TAG, "setupGridView(objectMap)"+objectMap.get("caption"));
-
-
                     photo.setCaption(objectMap.get("caption").toString());
                     photo.setTags(objectMap.get("tags").toString());
                     photo.setPhoto_id(objectMap.get("photo_id").toString());
@@ -192,7 +176,6 @@ public class ProfileFragment extends Fragment {
                     }
 
                     photo.setComments(comments);
-
                     List<Likes> likesList = new ArrayList<Likes>();
                     for (DataSnapshot dSnapshot : singleSnapshot
                             .child("likes").getChildren()){
@@ -239,14 +222,12 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.d(TAG, "onCancelled: query cancelled.");
-
             }
         });
     }
 
     @Override
     public void onResume() {
-
         super.onResume();
         this.getView().setFocusableInTouchMode(true);
         this.getView().requestFocus();
@@ -254,15 +235,11 @@ public class ProfileFragment extends Fragment {
 
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-
                 if (keyCode == KeyEvent.KEYCODE_BACK) {
-
                     return true;
                 }
                 return false;
             }
         });
     }
-
-
 }

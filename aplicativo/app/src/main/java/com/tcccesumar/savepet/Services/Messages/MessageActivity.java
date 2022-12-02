@@ -48,52 +48,40 @@ public class MessageActivity extends AppCompatActivity {
 
     CircleImageView profile_image;
     TextView username,fullname;
-
     FirebaseUser fuser;
     DatabaseReference reference;
-
     private Toolbar toolbar;
     Intent intent;
     boolean notify = false;
-
     TextView btn_send;
     EditText text_send;
-
     MessageAdapter messageAdapter;
     List<Chat> mchat;
-
     RecyclerView recyclerView;
     String userid;
-
     private APIService apiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
-
         toolbar = findViewById(R.id.MessageActivity_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         username = (TextView)findViewById(R.id.MessageActivity_userName);
         fullname = (TextView)findViewById(R.id.MessageActivity_fullname);
         profile_image = (CircleImageView)findViewById(R.id.MessageActivity_user_img);
         btn_send =findViewById(R.id.MessageActivity_btn_send);
         text_send = findViewById(R.id.MessageActivity_text_send);
-
         apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
-
         recyclerView = findViewById(R.id.MessageActivity_recyclerView);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         linearLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(linearLayoutManager);
-
         intent = getIntent();
         userid = intent.getStringExtra("userid");
-
         fuser = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference("Users").child(userid);
 
@@ -111,7 +99,6 @@ public class MessageActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
 
@@ -133,9 +120,7 @@ public class MessageActivity extends AppCompatActivity {
     }
 
     private void sendMessage(String sender, final String receiver, String message){
-
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("sender", sender);
         hashMap.put("receiver", receiver);
@@ -158,14 +143,12 @@ public class MessageActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
 
     }
 
     private void sendNotifiaction(String receiver, final String username, final String message) {
-
         DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens");
         Query query = tokens.orderByKey().equalTo(receiver);
         query.addValueEventListener(new ValueEventListener() {
@@ -190,7 +173,6 @@ public class MessageActivity extends AppCompatActivity {
 
                                 @Override
                                 public void onFailure(Call<MyResponse> call, Throwable t) {
-
                                 }
                             });
                 }
@@ -198,15 +180,12 @@ public class MessageActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
-
     }
 
     private void readMesagges(final String myid, final String userid, final String imageurl){
         mchat = new ArrayList<>();
-
         reference = FirebaseDatabase.getInstance().getReference("Chats");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -220,13 +199,11 @@ public class MessageActivity extends AppCompatActivity {
                     }
                     messageAdapter = new MessageAdapter(MessageActivity.this, mchat, imageurl);
                     recyclerView.setAdapter(messageAdapter);
-
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
     }

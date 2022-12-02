@@ -16,7 +16,6 @@ public class Client {
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
-
         return retrofit;
     }
 

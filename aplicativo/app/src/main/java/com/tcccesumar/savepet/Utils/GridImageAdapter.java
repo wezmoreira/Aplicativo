@@ -34,8 +34,8 @@ public class GridImageAdapter extends ArrayAdapter<String>{
         this.layoutResource = layoutResource;
         mAppend = append;
         this.imgURLs = imgURLs;
-
     }
+
     private static class ViewHolder{
         SquareImageView image;
         ProgressBar mProgressBar;
@@ -50,7 +50,6 @@ public class GridImageAdapter extends ArrayAdapter<String>{
             holder = new ViewHolder();
             holder.image = (SquareImageView) convertView.findViewById(R.id.gridImageView);
             holder.mProgressBar = (ProgressBar) convertView.findViewById(R.id.gridImageProgressbar);
-
             convertView.setTag(holder);
         }
         else{
@@ -58,7 +57,6 @@ public class GridImageAdapter extends ArrayAdapter<String>{
         }
 
         String imgURL = getItem(position);
-
         ImageLoader imageLoader = ImageLoader.getInstance();
 
         imageLoader.displayImage(mAppend + imgURL, holder.image, new ImageLoadingListener() {
@@ -90,7 +88,6 @@ public class GridImageAdapter extends ArrayAdapter<String>{
                 }
             }
         });
-
         return convertView;
     }
 }

@@ -23,11 +23,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     public static  final int MSG_TYPE_LEFT = 0;
     public static  final int MSG_TYPE_RIGHT = 1;
-
     private Context mContext;
     private List<Chat> mChat;
     private String imageurl;
-
     FirebaseUser fuser;
 
     public MessageAdapter(Context mContext, List<Chat> mChat, String imageurl) {
@@ -50,9 +48,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull MessageAdapter.ViewHolder holder, int position) {
-
         Chat chat = mChat.get(position);
-
         holder.show_message.setText(chat.getMessage());
         Glide.with(mContext).load(imageurl).into(holder.profile_image);
     }
@@ -63,14 +59,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-
         public TextView show_message;
         public ImageView profile_image;
         public TextView txt_seen;
-
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
             show_message = itemView.findViewById(R.id.showMessage);
             profile_image = itemView.findViewById(R.id.user_img);
         }

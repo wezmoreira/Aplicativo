@@ -21,15 +21,12 @@ public class PageAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
 
         switch (position){
-
             case 0:
                 ChatsFragment chatsFragment = new ChatsFragment();
                 return chatsFragment;
-
             case 1:
                 FriendsFragment friendsFragment = new FriendsFragment();
                 return friendsFragment;
-
             default:
                 return null;
         }
@@ -43,7 +40,6 @@ public class PageAdapter extends FragmentPagerAdapter {
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-
         switch (position){
             case 0:
                 return "CHAT";

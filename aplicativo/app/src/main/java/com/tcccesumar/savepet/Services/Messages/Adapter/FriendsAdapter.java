@@ -30,11 +30,9 @@ import com.tcccesumar.savepet.models.Users;
 public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
 
     String TAG = "FriendsAdapter";
-
     private Context mcontext;
     private List<Users> muser;
     private boolean ischat;
-
     private FirebaseUser firebaseUser;
     String theLastMessage;
     Users users;
@@ -50,19 +48,16 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
     public FriendsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mcontext).inflate(R.layout.friends_single_layout,parent,false);
         return new FriendsAdapter.ViewHolder(view);
-
     }
 
     @Override
     public void onBindViewHolder(@NonNull FriendsAdapter.ViewHolder holder, int position) {
-
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         users = muser.get(position);
         holder.username.setText(users.getUsername());
         Glide.with(mcontext)
                 .load(users.getProfilePhoto())
                 .into(holder.profileimage);
-
         if (ischat){
             lastMessage(users.getUser_id(), holder.last_msg);
         } else {
@@ -77,7 +72,6 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                 mcontext.startActivity(intent);
             }
         });
-
     }
 
     @Override
@@ -86,13 +80,10 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-
         public TextView username,last_msg;
         public CircleImageView profileimage;
-
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
             username = (TextView)itemView.findViewById(R.id.FriendSingle_userName);
             last_msg = (TextView)itemView.findViewById(R.id.FriendSingle_lastMsg);
             profileimage = (CircleImageView)itemView.findViewById(R.id.FriendSingle_user_img);
@@ -104,7 +95,6 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         theLastMessage = "default";
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Chats");
-
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -122,18 +112,15 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                     case  "default":
                         last_msg.setText(users.getFullName());
                         break;
-
                     default:
                         last_msg.setText(theLastMessage);
                         break;
                 }
-
                 theLastMessage = "default";
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
     }

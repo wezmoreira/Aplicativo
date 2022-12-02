@@ -35,38 +35,30 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         createacc = (TextView) findViewById(R.id.signup);
 
         try {
             Email = (TextInputLayout) findViewById(R.id.login_email);
             Pass = (TextInputLayout) findViewById(R.id.login_password);
             login = (Button) findViewById(R.id.Login_btn);
-            //loginwithfacebook = (TextView) findViewById(R.id.login_facebook);
             Forgotpassword = (TextView) findViewById(R.id.forgotpass);
-
-
             FAuth = FirebaseAuth.getInstance();
 
             login.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     email = Email.getEditText().getText().toString().trim();
                     password = Pass.getEditText().getText().toString().trim();
                     if (isValid()) {
-
                         final ProgressDialog mDialog = new ProgressDialog(Login.this);
                         mDialog.setCanceledOnTouchOutside(false);
                         mDialog.setCancelable(false);
                         mDialog.setMessage("Fazendo login...");
                         mDialog.show();
                         FAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-
                                     mDialog.dismiss();
                                     if (FAuth.getCurrentUser().isEmailVerified()) {
                                         mDialog.dismiss();
@@ -74,20 +66,15 @@ public class Login extends AppCompatActivity {
                                         Intent z = new Intent(Login.this, Home.class);
                                         startActivity(z);
                                         finish();
-
-
                                     } else {
                                         ReusableCode.ShowAlert(Login.this, "", "Verifique seu e-mail");
                                     }
-
                                 } else {
-
                                     mDialog.dismiss();
                                     ReusableCode.ShowAlert(Login.this, "Error", task.getException().getMessage());
                                 }
                             }
                         });
-
                     }
                 }
             });
@@ -100,10 +87,8 @@ public class Login extends AppCompatActivity {
                 finish();
             }
         });
-
         } catch (Exception e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-
         }
     }
     String emailpattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
@@ -125,7 +110,6 @@ public class Login extends AppCompatActivity {
                 Email.setErrorEnabled(true);
                 Email.setError("Digite um endereço de e-mail válido");
             }
-
         }
         if (TextUtils.isEmpty(password)) {
             Pass.setErrorEnabled(true);

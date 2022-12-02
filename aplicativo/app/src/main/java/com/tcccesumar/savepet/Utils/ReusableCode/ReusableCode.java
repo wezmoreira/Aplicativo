@@ -13,7 +13,6 @@ public class ReusableCode {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
                 dialog.dismiss();
             }
         }).setTitle(title).setMessage(message).show();

@@ -41,15 +41,12 @@ public class StoryActivity extends AppCompatActivity implements StoriesProgressV
     int counter = 0;
     long pressTime = 0L;
     long limit = 500L;
-
     private StoriesProgressView storiesProgressView;
     ImageView image, story_photo;
     TextView story_username;
-
     LinearLayout r_seen;
     TextView seen_number;
     ImageView story_delete;
-
     List<String> images;
     List<String> storyids;
     String userid;
@@ -76,19 +73,15 @@ public class StoryActivity extends AppCompatActivity implements StoriesProgressV
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_story);
-
         storiesProgressView = (StoriesProgressView) findViewById(R.id.ActivityStory_storiesProgrsssView);
         image = findViewById(R.id.ActivityStory_image);
         story_photo = findViewById(R.id.ActivityStory_story_photo);
         story_username = findViewById(R.id.ActivityStory_story_username);
-
         r_seen = findViewById(R.id.ActivityStory_r_seen);
         seen_number = findViewById(R.id.ActivityStory_seen_number);
         story_delete = findViewById(R.id.ActivityStory_story_delete);
-
         r_seen.setVisibility(View.GONE);
         story_delete.setVisibility(View.GONE);
-
         userid = getIntent().getStringExtra("userid");
 
         if (userid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
@@ -132,7 +125,6 @@ public class StoryActivity extends AppCompatActivity implements StoriesProgressV
         story_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 storiesProgressView.pause();
                 new AlertDialog.Builder(StoryActivity.this)
                         .setMessage("Tem certeza de que deseja excluir?")
@@ -161,32 +153,27 @@ public class StoryActivity extends AppCompatActivity implements StoriesProgressV
                         .show();
             }
         });
-
     }
 
     @Override
     public void onNext() {
-
         Glide.with(getApplicationContext()).load(images.get(++counter)).into(image);
-
         addView(storyids.get(counter));
         seenNumber(storyids.get(counter));
     }
 
     @Override
     public void onPrev() {
-
         if ((counter - 1) < 0) return;
         Glide.with(getApplicationContext()).load(images.get(--counter)).into(image);
-
         seenNumber(storyids.get(counter));
-
     }
 
     @Override
     public void onComplete() {
         finish();
     }
+
     @Override
     protected void onDestroy() {
         storiesProgressView.destroy();
@@ -204,6 +191,7 @@ public class StoryActivity extends AppCompatActivity implements StoriesProgressV
         storiesProgressView.resume();
         super.onResume();
     }
+
     private void getStories(String userid){
         images = new ArrayList<>();
         storyids = new ArrayList<>();
@@ -223,21 +211,19 @@ public class StoryActivity extends AppCompatActivity implements StoriesProgressV
                     }
                 }
 
-                storiesProgressView.setStoriesCount(images.size()); // <- set stories
-                storiesProgressView.setStoryDuration(5000L); // <- set duração story
-                storiesProgressView.setStoriesListener(StoryActivity.this); // <- set listener
-                storiesProgressView.startStories(counter); // <- start progress
+                storiesProgressView.setStoriesCount(images.size());
+                storiesProgressView.setStoryDuration(5000L);
+                storiesProgressView.setStoriesListener(StoryActivity.this);
+                storiesProgressView.startStories(counter);
 
                 Glide.with(getApplicationContext()).load(images.get(counter)).into(image);
 
                 addView(storyids.get(counter));
                 seenNumber(storyids.get(counter));
-
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
     }
@@ -255,7 +241,6 @@ public class StoryActivity extends AppCompatActivity implements StoriesProgressV
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
     }
@@ -277,7 +262,6 @@ public class StoryActivity extends AppCompatActivity implements StoriesProgressV
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
     }

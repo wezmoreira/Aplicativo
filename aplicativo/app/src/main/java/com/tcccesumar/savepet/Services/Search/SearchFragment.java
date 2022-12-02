@@ -36,46 +36,36 @@ public class SearchFragment extends Fragment {
     private RecyclerView recyclerView;
     private SearchUsersAdapter searchUsersAdapter;
     private List<Users> mUser;
-
     EditText search;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_search,null);
-
         recyclerView = (RecyclerView)v.findViewById(R.id.recycler_view_search);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
         search = (EditText)v.findViewById(R.id.search_user);
-
         mUser = new ArrayList<>();
         readUsers();
         search.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
                 searchUsers(s.toString().toLowerCase());
-
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
-
         return v;
     }
 
     private void searchUsers(String s){
-
         Query query = FirebaseDatabase.getInstance().getReference("Users").orderByChild("username")
                 .startAt(s)
                 .endAt(s+"\uf8ff");
@@ -92,10 +82,8 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
-
     }
 
     private void readUsers(){
@@ -110,19 +98,16 @@ public class SearchFragment extends Fragment {
                         mUser.add(users);
                     }
                     updateSearchList();
-
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
     }
 
     public void onResume() {
-
         super.onResume();
         this.getView().setFocusableInTouchMode(true);
         this.getView().requestFocus();
@@ -130,9 +115,7 @@ public class SearchFragment extends Fragment {
 
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-
                 if (keyCode == KeyEvent.KEYCODE_BACK) {
-
                     return true;
                 }
                 return false;
@@ -141,13 +124,9 @@ public class SearchFragment extends Fragment {
     }
 
     private void updateSearchList(){
-
         Log.d(TAG,"updateSearchList : Updating Search List");
 
         searchUsersAdapter = new SearchUsersAdapter(getContext(),mUser);
         recyclerView.setAdapter(searchUsersAdapter);
-
-
     }
-
 }

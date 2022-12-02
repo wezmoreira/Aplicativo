@@ -35,70 +35,47 @@ import com.tcccesumar.savepet.models.Users;
 public class ChatsFragment extends Fragment {
 
     private RecyclerView recyclerView;
-
     private FriendsAdapter userAdapter;
     private List<Users> mUsers;
-
     FirebaseUser fuser;
     DatabaseReference reference;
-
     private List<String> usersList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chats, container, false);
-
         recyclerView = view.findViewById(R.id.ChatsFragment_recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
         usersList = new ArrayList<>();
-
         fuser = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference("Chats");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-
                 usersList.clear();
-
                 for(DataSnapshot snapshot:dataSnapshot.getChildren()){
-
                     Chat chat=snapshot.getValue(Chat.class);
-
                     assert chat != null;
                     if (chat.getSender().equals(fuser.getUid())) {
-
                         usersList.add(chat.getReceiver());
-
                     }
-
                     if (chat.getReceiver().equals(fuser.getUid())) {
-
                         usersList.add(chat.getSender());
-
                     }
-
                 }
-
 
                 Set<String> hashSet = new HashSet<String>(usersList);
                 usersList.clear();
                 usersList.addAll(hashSet);
 
-
                 readChats();
-
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
-
         UpdateToken();
         return view;
     }
@@ -112,41 +89,26 @@ public class ChatsFragment extends Fragment {
     }
 
     private void readChats() {
-
         mUsers=new ArrayList<>();
-
         reference= FirebaseDatabase.getInstance().getReference("Users");
-
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
                 for(DataSnapshot snapshot:dataSnapshot.getChildren()){
-
                     Users user=snapshot.getValue(Users.class);
-
                     for(String id:usersList){
-
                         assert user != null;
                         if (user.getUser_id().equals(id)) {
-
                             mUsers.add(user);
-
                         }
-
                     }
-
                 }
-
                 userAdapter=new FriendsAdapter(getContext(),mUsers,true);
                 recyclerView.setAdapter(userAdapter);
-
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
 

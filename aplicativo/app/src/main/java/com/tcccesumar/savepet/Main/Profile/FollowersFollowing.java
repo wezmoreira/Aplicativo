@@ -25,7 +25,6 @@ import com.tcccesumar.savepet.models.Users;
 public class FollowersFollowing extends AppCompatActivity {
 
     String id,title,number;
-
     List<String> idList;
     RecyclerView recyclerView;
     TextView Title,Number;
@@ -36,19 +35,15 @@ public class FollowersFollowing extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_followers_following);
-
         Title = (TextView) findViewById(R.id.FollowFollowing_txt);
         Number = (TextView) findViewById(R.id.FollowFollowing_number);
         recyclerView = (RecyclerView) findViewById(R.id.FollowFollowing_recyclerView);
-
         Intent intent = getIntent();
         id = intent.getStringExtra("id");
         title = intent.getStringExtra("title");
         number = intent.getStringExtra("number");
-
         Title.setText(title);
         Number.setText(number);
-
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         usersList = new ArrayList<>();
@@ -58,7 +53,6 @@ public class FollowersFollowing extends AppCompatActivity {
         idList = new ArrayList<>();
 
         switch (title){
-
             case ("Followers"):
                 getFollowers();
                 break;
@@ -68,13 +62,10 @@ public class FollowersFollowing extends AppCompatActivity {
             case "Views":
                 getViews();
                 break;
-
         }
-
     }
 
     private void getFollowings() {
-
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Following").child(id);
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -88,13 +79,11 @@ public class FollowersFollowing extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
     }
 
     private void getFollowers() {
-
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Followers").child(id);
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -108,21 +97,18 @@ public class FollowersFollowing extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
 
     }
 
     private void showUsers() {
-
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 usersList.clear();
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
-
                     Users users = dataSnapshot.getValue(Users.class);
                     for(String id : idList){
                         if(users.getUser_id().equals(id)){
@@ -135,7 +121,6 @@ public class FollowersFollowing extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
 
@@ -155,10 +140,7 @@ public class FollowersFollowing extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
     }
-
-
 }

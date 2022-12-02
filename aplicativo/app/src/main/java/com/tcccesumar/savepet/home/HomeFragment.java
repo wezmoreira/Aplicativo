@@ -51,12 +51,9 @@ public class HomeFragment extends Fragment {
     private HomeFragmentPostViewListAdapter mAdapter;
     private int mResults;
     ImageView message;
-
-
     private RecyclerView recyclerViewStory;
     private StoryAdapter storyAdapter;
     private List<Story> storyList;
-
 
     @Nullable
     @Override
@@ -66,7 +63,6 @@ public class HomeFragment extends Fragment {
         mFollowing = new ArrayList<>();
         mPhotos = new ArrayList<>();
         mPaginatedPhotos = new ArrayList<>();
-
         message = v.findViewById(R.id.FragmentHome_msg);
         message.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,12 +81,9 @@ public class HomeFragment extends Fragment {
         storyAdapter = new StoryAdapter(getContext(),storyList);
         //recyclerView_story.setAdapter(storyAdapter);
 
-
         getFollowing();
         initImageLoader();
         displayMorePhotos();
-
-
         return v;
     }
     private void getFollowing(){
@@ -106,7 +99,6 @@ public class HomeFragment extends Fragment {
                 for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
                     Log.d(TAG, "onDataChange: found user: " +
                             singleSnapshot.child("user_id").getValue());
-
                     mFollowing.add(singleSnapshot.child("user_id").getValue().toString());
                 }
                 mFollowing.add(FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -116,7 +108,6 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
     }
@@ -140,7 +131,6 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
-
                         Photo photo = new Photo();
                         Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
 
@@ -150,7 +140,6 @@ public class HomeFragment extends Fragment {
                         photo.setUser_id(objectMap.get("user_id").toString());
                         photo.setDate_Created(objectMap.get("date_Created").toString());
                         photo.setImage_Path(objectMap.get("image_Path").toString());
-
 
                         ArrayList<Comments> comments = new ArrayList<Comments>();
                         for (DataSnapshot dSnapshot : singleSnapshot
@@ -172,7 +161,6 @@ public class HomeFragment extends Fragment {
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-
                 }
             });
         }
@@ -189,7 +177,6 @@ public class HomeFragment extends Fragment {
                 });
 
                 int iterations = mPhotos.size();
-
                 if(iterations > 10){
                     iterations = 10;
                 }
@@ -198,7 +185,6 @@ public class HomeFragment extends Fragment {
                 for(int i = 0; i < iterations; i++){
                     mPaginatedPhotos.add(mPhotos.get(i));
                 }
-
                 mAdapter = new HomeFragmentPostViewListAdapter(getActivity(), R.layout.fragment_home_post_viewer, mPaginatedPhotos);
                 mListView.setAdapter(mAdapter);
 
@@ -214,9 +200,7 @@ public class HomeFragment extends Fragment {
         Log.d(TAG, "displayMorePhotos: displaying more photos");
 
         try{
-
             if(mPhotos.size() > mResults && mPhotos.size() > 0){
-
                 int iterations;
                 if(mPhotos.size() > (mResults + 10)){
                     Log.d(TAG, "displayMorePhotos: there are greater than 10 more photos");
@@ -225,7 +209,6 @@ public class HomeFragment extends Fragment {
                     Log.d(TAG, "displayMorePhotos: there is less than 10 more photos");
                     iterations = mPhotos.size() - mResults;
                 }
-
                 for(int i = mResults; i < mResults + iterations; i++){
                     mPaginatedPhotos.add(mPhotos.get(i));
                 }
@@ -262,16 +245,13 @@ public class HomeFragment extends Fragment {
                         if (countStory > 0){
                             storyList.add(story);
                         }
-
                     }
                 }
-
                 storyAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
     }

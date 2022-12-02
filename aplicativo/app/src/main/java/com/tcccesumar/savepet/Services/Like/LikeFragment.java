@@ -35,28 +35,22 @@ public class LikeFragment extends Fragment {
     private LikeNotificationAdapter likeNotificationAdapter;
     private List<Notification> notificationList;
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_like,null);
-
         recyclerView = (RecyclerView)v.findViewById(R.id.FragmentLike_recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
         notificationList = new ArrayList<>();
         likeNotificationAdapter = new LikeNotificationAdapter(getContext(),notificationList);
         recyclerView.setAdapter(likeNotificationAdapter);
-        
         readNotifications();
-
         return v;
     }
 
     private void readNotifications() {
-
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Notifications")
                 .child(firebaseUser.getUid());
@@ -74,29 +68,22 @@ public class LikeFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
     }
 
-
     public void onResume() {
-
         super.onResume();
         this.getView().setFocusableInTouchMode(true);
         this.getView().requestFocus();
         this.getView().setOnKeyListener(new View.OnKeyListener() {
-
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-
                 if (keyCode == KeyEvent.KEYCODE_BACK) {
-
                     return true;
                 }
                 return false;
             }
         });
     }
-
 }

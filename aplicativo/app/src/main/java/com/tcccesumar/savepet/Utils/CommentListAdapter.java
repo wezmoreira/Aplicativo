@@ -56,20 +56,17 @@ public class CommentListAdapter extends ArrayAdapter<Comments> {
     @NonNull
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-
         final ViewHolder holder;
 
         if(convertView == null){
             convertView = mInflater.inflate(layoutResource, parent, false);
             holder = new ViewHolder();
-
             holder.comment = (TextView) convertView.findViewById(R.id.comment_posted);
             holder.timestamp = (TextView) convertView.findViewById(R.id.comment_time_posted);
             holder.reply = (TextView) convertView.findViewById(R.id.comment_reply);
             holder.likes = (TextView) convertView.findViewById(R.id.comment_likes);
             holder.like = (ImageView) convertView.findViewById(R.id.comment_like_btn);
             holder.profileImage = (CircleImageView) convertView.findViewById(R.id.user_img);
-
             convertView.setTag(holder);
         }else{
             holder = (ViewHolder) convertView.getTag();
@@ -91,17 +88,13 @@ public class CommentListAdapter extends ArrayAdapter<Comments> {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for ( DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
-
                     holder.comment.setText(singleSnapshot.getValue(Users.class)
                             .getUsername()+" "+getItem(position).getComment());
-
                     ImageLoader imageLoader = ImageLoader.getInstance();
-
                     imageLoader.displayImage(
                             singleSnapshot.getValue(Users.class).getProfilePhoto(),
                             holder.profileImage);
                 }
-
             }
 
             @Override
@@ -120,9 +113,6 @@ public class CommentListAdapter extends ArrayAdapter<Comments> {
         }catch (NullPointerException e){
             Toast.makeText(mContext, "getView: NullPointerException:"+e.getMessage(), Toast.LENGTH_SHORT).show();
         }
-
-
-
         return convertView;
     }
 
@@ -131,7 +121,6 @@ public class CommentListAdapter extends ArrayAdapter<Comments> {
      * @return
      */
     private String getTimestampDifference(Comments comment){
-
         String difference = "";
         Calendar c = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -148,5 +137,4 @@ public class CommentListAdapter extends ArrayAdapter<Comments> {
         }
         return difference;
     }
-
 }

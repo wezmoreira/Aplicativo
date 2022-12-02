@@ -39,15 +39,11 @@ public class PostActivity extends AppCompatActivity {
 
     ImageView postNow,backFromPost,addedImage;
     EditText addedCaption,AddedTag;
-
     DatabaseReference databaseReference,data;
     StorageReference storageReference,ref;
-
     methods method;
-
     int count = 0;
     int PICK_IMAGE_REQUEST=1;
-
     Uri imageUri;
     String RandomUId,userId;
     String postCount;
@@ -57,17 +53,13 @@ public class PostActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
-
         postNow = (ImageView)findViewById(R.id.post_now);
         backFromPost = (ImageView)findViewById(R.id.back_from_post);
         addedImage = (ImageView)findViewById(R.id.added_image);
         addedCaption = (EditText)findViewById(R.id.added_caption);
         AddedTag = (EditText)findViewById(R.id.added_tags);
-
-
         storageReference = FirebaseStorage.getInstance().getReference();
         databaseReference = FirebaseDatabase.getInstance().getReference();
-
         method = new methods();
         count = getCount();
 
@@ -85,11 +77,7 @@ public class PostActivity extends AppCompatActivity {
                 uploadimage();
             }
         });
-
         openFileChooser();
-
-
-
     }
 
     private void openFileChooser() {
@@ -102,14 +90,11 @@ public class PostActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
                 && data != null && data.getData() != null){
             imageUri = data.getData();
             addedImage.setImageURI(imageUri);
-
         }
-
         super.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -118,10 +103,8 @@ public class PostActivity extends AppCompatActivity {
             final ProgressDialog progressDialog = new ProgressDialog(PostActivity.this);
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
-
             caption = addedCaption.getText().toString().trim();
             tags = AddedTag.getText().toString().trim();
-
             RandomUId = UUID.randomUUID().toString();
             userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
             ref = storageReference.child("photos/users/"+"/"+userId+"/photo"+(count+1));
@@ -138,34 +121,26 @@ public class PostActivity extends AppCompatActivity {
                             Toast.makeText(PostActivity.this, "Postado com sucesso", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(PostActivity.this,Home.class));
                             finish();
-
-
                         }
                     });
-
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-
                     progressDialog.dismiss();
                     Toast.makeText(PostActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(PostActivity.this,Home.class));
                     finish();
-
                 }
             }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-
                     double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
                     progressDialog.setMessage("Uploaded " + (int) progress + "%");
                     progressDialog.setCanceledOnTouchOutside(false);
                 }
             });
-
         }
-
     }
 
 //******************************FUNÇÃO PARA ADICIONAR FOTO AO ARMAZENAMENTO FIREBASE********
@@ -185,25 +160,18 @@ public class PostActivity extends AppCompatActivity {
 
 //******************************FUNÇÃO PARA AUMENTAR CONTAGEM DE POSTS********
     public void increasePostCount(final int count){
-
-
         data = FirebaseDatabase.getInstance().getReference("Users").child(userId);
         data.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 postCount = Integer.toString(count+1);
                 data.child("posts").setValue(postCount);
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
-
-
-
     }
 
 //******************************FUNÇÃO PARA OBTER HORÁRIO DE POSTAGEM********
@@ -212,10 +180,8 @@ public class PostActivity extends AppCompatActivity {
         return sdf.format(new Date());
     }
 
-
 //******************************FUNÇÃO PARA OBTER CONTAGEM DE POST********
     public int getCount() {
-
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -224,7 +190,6 @@ public class PostActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
         return count;

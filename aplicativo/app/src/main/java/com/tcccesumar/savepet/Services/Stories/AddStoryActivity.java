@@ -45,9 +45,7 @@ public class AddStoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_story);
-
         storageRef = FirebaseStorage.getInstance().getReference("story");
-
         CropImage.activity()
                 .setAspectRatio(9,16)
                 .start(AddStoryActivity.this);
@@ -68,7 +66,6 @@ public class AddStoryActivity extends AppCompatActivity {
         if (mImageUri != null){
             final StorageReference fileReference = storageRef.child(System.currentTimeMillis()
                     + "." + getFileExtension(mImageUri));
-
             uploadTask = fileReference.putFile(mImageUri);
             uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                 @Override
@@ -84,12 +81,9 @@ public class AddStoryActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         Uri downloadUri = task.getResult();
                         miUrlOk = downloadUri.toString();
-
                         String myid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
                         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Story")
                                 .child(myid);
-
                         String storyid = reference.push().getKey();
                         long timeend = System.currentTimeMillis()+86400000; // 1 dia depois
 
@@ -101,11 +95,8 @@ public class AddStoryActivity extends AppCompatActivity {
                         hashMap.put("userid", myid);
 
                         reference.child(storyid).setValue(hashMap);
-
                         pd.dismiss();
-
                         finish();
-
                     } else {
                         Toast.makeText(AddStoryActivity.this, "Falhou", Toast.LENGTH_SHORT).show();
                     }
@@ -126,14 +117,10 @@ public class AddStoryActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             mImageUri = result.getUri();
-
             uploadImage_10();
-
         } else {
             Toast.makeText(this, "Algo deu errado!", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(AddStoryActivity.this, MainActivity.class));

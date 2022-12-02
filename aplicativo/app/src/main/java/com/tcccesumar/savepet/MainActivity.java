@@ -28,14 +28,12 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth Fauth;
     DatabaseReference databaseReference;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         if (isOnline()) {
-
             load();
         } else {
             try {
@@ -59,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
         ConnectivityManager conMgr = (ConnectivityManager) getApplicationContext()
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
-
         if(netInfo == null || !netInfo.isConnected() || !netInfo.isAvailable()){
             return false;
         }
@@ -70,15 +67,12 @@ public class MainActivity extends AppCompatActivity {
         savepet_logo = (ImageView)findViewById(R.id.savepet_logo);
         splm = (TextView)findViewById(R.id.sprealm);
         frm = (TextView)findViewById(R.id.from);
-
         savepet_logo.animate().alpha(0f).setDuration(0);
         splm.animate().alpha(0f).setDuration(0);
-
         savepet_logo.animate().alpha(1f).setDuration(1000).setListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 splm.animate().alpha(1f).setDuration(800);
-
             }
         });
         new Handler().postDelayed(new Runnable() {
@@ -91,19 +85,16 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(n);
                         finish();
                     } else {
-
                         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                         builder.setMessage("Verifique se você verificou seu e-mail, caso contrário, verifique");
                         builder.setCancelable(false);
                         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-
                                 dialog.dismiss();
                                 Intent intent = new Intent(MainActivity.this, Login.class);
                                 startActivity(intent);
                                 finish();
-
                             }
                         });
                         AlertDialog alert = builder.create();
@@ -114,9 +105,7 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(MainActivity.this, Login.class);
                     startActivity(intent);
                     finish();
-
                 }
-
             }
         },3000);
     }

@@ -36,18 +36,15 @@ public class UniversalImageLoader {
                 .cacheOnDisk(true).resetViewBeforeLoading(true)
                 .imageScaleType(ImageScaleType.EXACTLY)
                 .displayer(new FadeInBitmapDisplayer(300)).build();
-
         ImageLoaderConfiguration configuration = new ImageLoaderConfiguration.Builder(mContext)
                 .defaultDisplayImageOptions(defaultOptions)
                 .memoryCache(new WeakMemoryCache())
                 .diskCacheSize(100 * 1024 * 1024).build();
-
         return configuration;
     }
 
 
     public static void setImage(String imgURL, ImageView image, final ProgressBar mProgressBar, String append){
-
         ImageLoader imageLoader = ImageLoader.getInstance();
         imageLoader.displayImage(append + imgURL, image, new ImageLoadingListener() {
             @Override

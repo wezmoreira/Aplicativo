@@ -22,18 +22,14 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-
         toolbar = findViewById(R.id.ChatActivity_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("SavePet");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         viewPager = findViewById(R.id.ChatActivity_mainTabPager);
         pageAdapter = new PageAdapter(getSupportFragmentManager());
         viewPager.setAdapter(pageAdapter);
-
         tabLayout = findViewById(R.id.ChatActivity_maintabs);
         tabLayout.setupWithViewPager(viewPager);
-
     }
 }

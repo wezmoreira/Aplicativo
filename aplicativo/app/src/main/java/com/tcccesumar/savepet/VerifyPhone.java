@@ -40,16 +40,13 @@ public class VerifyPhone extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verify_phone);
-
         phonenumber = getIntent().getStringExtra("phonenumber").trim();
-
         sendverificationcode(phonenumber);
         entercode = (EditText) findViewById(R.id.OTP);
         txt = (TextView) findViewById(R.id.text);
         Resend = (Button) findViewById(R.id.Resendotp);
         FAuth = FirebaseAuth.getInstance();
         verify = (Button) findViewById(R.id.Verify);
-
         Resend.setVisibility(View.INVISIBLE);
         txt.setVisibility(View.INVISIBLE);
         verify.setOnClickListener(new View.OnClickListener() {
@@ -79,17 +76,14 @@ public class VerifyPhone extends AppCompatActivity {
             public void onFinish() {
                 Resend.setVisibility(View.VISIBLE);
                 txt.setVisibility(View.INVISIBLE);
-
             }
         }.start();
 
         Resend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Resend.setVisibility(View.INVISIBLE);
                 Resendotp(phonenumber);
-
                 new CountDownTimer(60000, 1000) {
                     @Override
                     public void onTick(long millisUntilFinished) {
@@ -101,17 +95,13 @@ public class VerifyPhone extends AppCompatActivity {
                     public void onFinish() {
                         Resend.setVisibility(View.VISIBLE);
                         txt.setVisibility(View.INVISIBLE);
-
                     }
                 }.start();
-
             }
         });
-
     }
 
     private void sendverificationcode(String number) {
-
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
                 number,
                 60,
@@ -120,36 +110,31 @@ public class VerifyPhone extends AppCompatActivity {
                 mCallBack
         );
     }
+
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks
             mCallBack = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
         @Override
         public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
             super.onCodeSent(s, forceResendingToken);
-
             verificationId = s;
         }
 
         @Override
         public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
-
-
             String code = phoneAuthCredential.getSmsCode();
             if (code != null) {
                 entercode.setText(code);
                 verifyCode(code);
-
             }
         }
 
         @Override
         public void onVerificationFailed(FirebaseException e) {
-
             Toast.makeText(VerifyPhone.this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
     };
 
     private void Resendotp(String phonenumber) {
-
         sendverificationcode(phonenumber);
     }
 
@@ -160,24 +145,18 @@ public class VerifyPhone extends AppCompatActivity {
     }
 
     private void linkCredential(PhoneAuthCredential credential) {
-
         FAuth.getCurrentUser().linkWithCredential(credential)
                 .addOnCompleteListener(VerifyPhone.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-
                             Intent intent = new Intent(VerifyPhone.this,Login.class);
                             startActivity(intent);
                             finish();
-
-
                         } else {
                             ReusableCode.ShowAlert(VerifyPhone.this,"Error",task.getException().getMessage());
                         }
                     }
                 });
     }
-
-
 }

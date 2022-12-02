@@ -27,7 +27,6 @@ public class SearchUsersAdapter extends RecyclerView.Adapter<SearchUsersAdapter.
     private Context mcontext;
     private List<Users> muser;
     String TAG = "SearchUserAdapter";
-
     private FirebaseUser firebaseUser;
 
     public SearchUsersAdapter(Context mcontext, List<Users> muser) {
@@ -38,7 +37,6 @@ public class SearchUsersAdapter extends RecyclerView.Adapter<SearchUsersAdapter.
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
         View view = LayoutInflater.from(mcontext).inflate(R.layout.user_search_items,parent,false);
         return new SearchUsersAdapter.ViewHolder(view);
     }
@@ -55,15 +53,12 @@ public class SearchUsersAdapter extends RecyclerView.Adapter<SearchUsersAdapter.
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Log.d(TAG, "Users Profile UID "+users.getUser_id());
                 Intent intent=new Intent(mcontext, UserSearchProfileActivity.class);
                 intent.putExtra("SearchedUserid",users.getUser_id());
                 mcontext.startActivity(intent);
-
             }
         });
-
     }
 
     @Override
@@ -72,13 +67,11 @@ public class SearchUsersAdapter extends RecyclerView.Adapter<SearchUsersAdapter.
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-
         public TextView username,fullname;
         public CircleImageView profileimage;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
             username = (TextView)itemView.findViewById(R.id.userName);
             fullname = (TextView)itemView.findViewById(R.id.fullName);
             profileimage = (CircleImageView)itemView.findViewById(R.id.user_img);

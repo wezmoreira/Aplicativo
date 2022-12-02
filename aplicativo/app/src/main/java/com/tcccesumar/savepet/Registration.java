@@ -57,7 +57,6 @@ public class Registration extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
-
         alreadyhaveacc = (TextView)findViewById(R.id.AlreadyHavesignin);
         Birth = (EditText)findViewById(R.id.birthdate);
         Fname = (TextInputLayout) findViewById(R.id.Fullname);
@@ -68,17 +67,12 @@ public class Registration extends AppCompatActivity {
         Mobileno = (TextInputLayout) findViewById(R.id.mobilenoo);
         Description = (TextInputLayout) findViewById(R.id.bio);
         Website = (TextInputLayout) findViewById(R.id.website);
-
         Cpp = (CountryCodePicker) findViewById(R.id.countrycode);
-
         register = (Button) findViewById(R.id.signup_button);
-
         RelativeLayout container = (RelativeLayout) findViewById(R.id.relative_registration);
-
         anim = (AnimationDrawable) container.getBackground();
         anim.setEnterFadeDuration(6000);
         anim.setExitFadeDuration(2000);
-
 
         Birth.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,7 +88,6 @@ public class Registration extends AppCompatActivity {
                     }
                 },year,month,day);
                 datePickerDialog.show();
-
             }
         });
 
@@ -107,16 +100,13 @@ public class Registration extends AppCompatActivity {
             }
         });
 
-
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference();
         FAuth = FirebaseAuth.getInstance();
 
-
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 fname = Fname.getEditText().getText().toString().trim();
                 username = Username.getEditText().getText().toString().trim();
                 email = Email.getEditText().getText().toString().trim();
@@ -128,14 +118,11 @@ public class Registration extends AppCompatActivity {
                 website = Website.getEditText().getText().toString().trim();
 
                 if (isValid()) {
-
                     databaseReference.child("Users").orderByChild("Username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if(snapshot.exists()){
                                 Toast.makeText(Registration.this, "O nome de usuário já existe. Tente outro nome de usuário.", Toast.LENGTH_SHORT).show();
-
-
                             }else {
                                 final ProgressDialog mDialog = new ProgressDialog(Registration.this);
                                 mDialog.setCancelable(false);
@@ -147,7 +134,6 @@ public class Registration extends AppCompatActivity {
                                     @Override
                                     public void onComplete(@NonNull Task<AuthResult> task) {
                                         if (task.isSuccessful()) {
-
                                             useridd = FAuth.getCurrentUser().getUid();
 
                                             addUsers(description,fname,username,website);
@@ -166,49 +152,36 @@ public class Registration extends AppCompatActivity {
                                                         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                                             @Override
                                                             public void onClick(DialogInterface dialog, int which) {
-
                                                                 dialog.dismiss();
-
                                                                 String phonenumber = Cpp.getSelectedCountryCodeWithPlus() + mobileno;
                                                                 Intent b = new Intent(Registration.this, VerifyPhone.class);
                                                                 b.putExtra("phonenumber", phonenumber);
                                                                 startActivity(b);
-
                                                             }
                                                         });
                                                         AlertDialog alert = builder.create();
                                                         alert.show();
-
                                                     } else {
                                                         mDialog.dismiss();
                                                         ReusableCode.ShowAlert(Registration.this, "Error", task.getException().getMessage());
-
                                                     }
                                                 }
                                             });
-
-
                                         } else {
                                             mDialog.dismiss();
                                             ReusableCode.ShowAlert(Registration.this, "Error", task.getException().getMessage());
                                         }
-
                                     }
                                 });
-
                             }
                         }
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
-
                         }
                     });
 
                 }
-
-
-
             }
         });
 
@@ -246,7 +219,6 @@ public class Registration extends AppCompatActivity {
                 Email.setErrorEnabled(true);
                 Email.setError("Digite um endereço de e-mail válido");
             }
-
         }
         if (TextUtils.isEmpty(pass)) {
             Pass.setErrorEnabled(true);
@@ -287,7 +259,6 @@ public class Registration extends AppCompatActivity {
     }
 
     public void addUsers(String Discription,String FullName,String Username,String Website){
-
         Users user = new Users(
                 Discription,
                 "0",
@@ -301,8 +272,8 @@ public class Registration extends AppCompatActivity {
         );
         databaseReference.child("Users").child(useridd).setValue(user);
     }
-    public void addPrivateDetails(String user_id, String email, String gender, String birthdate, String phoneNumber){
 
+    public void addPrivateDetails(String user_id, String email, String gender, String birthdate, String phoneNumber){
         privatedetails details = new privatedetails(
                 user_id,
                 email,
@@ -312,11 +283,10 @@ public class Registration extends AppCompatActivity {
         );
         databaseReference.child("Privatedetails").child(useridd).setValue(details);
     }
-    public void addPasswords(String passwords){
 
+    public void addPasswords(String passwords){
         Passwords pass = new Passwords(passwords);
         databaseReference.child("Passwords").child(useridd).setValue(pass);
-
     }
 
     @Override

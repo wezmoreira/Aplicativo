@@ -50,14 +50,12 @@ public class HomeFragmentPostViewListAdapter extends ArrayAdapter<Photo> {
     OnLoadMoreItemsListener mOnLoadMoreItemsListener;
 
     private static final String TAG = "HomePostViewListAdapter";
-
     private LayoutInflater mInflater;
     private int mLayoutResource;
     private Context mContext;
     private DatabaseReference mReference;
     private String currentUsername = "";
     private ProgressBar mProgressBar;
-
 
     public HomeFragmentPostViewListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<Photo> objects) {
         super(context, resource, objects);
@@ -66,13 +64,13 @@ public class HomeFragmentPostViewListAdapter extends ArrayAdapter<Photo> {
         this.mContext = context;
         mReference = FirebaseDatabase.getInstance().getReference();
     }
+
     static class ViewHolder{
         CircleImageView mprofileImage;
         String likesString = "";
         TextView username, timeDetla, caption, likes, comments,mTags;
         SquareImageView image;
         ImageView heartRed, heartWhite, comment;
-
         Users settings = new Users();
         StringBuilder users;
         boolean likeByCurrentUser;
@@ -84,13 +82,11 @@ public class HomeFragmentPostViewListAdapter extends ArrayAdapter<Photo> {
     @NonNull
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-
         final ViewHolder holder;
 
         if(convertView == null){
             convertView = mInflater.inflate(mLayoutResource, parent, false);
             holder = new ViewHolder();
-
             holder.username = (TextView) convertView.findViewById(R.id.fragment_home_post_viewer_username);
             holder.image = (SquareImageView) convertView.findViewById(R.id.fragment_home_post_viewer_post_image);
             holder.heartRed = (ImageView) convertView.findViewById(R.id.fragment_home_post_viewer_img_heart_red);
@@ -106,22 +102,13 @@ public class HomeFragmentPostViewListAdapter extends ArrayAdapter<Photo> {
             holder.photo = getItem(position);
             holder.detector = new GestureDetector(mContext, new GestureListener(holder));
             holder.users = new StringBuilder();
-
             convertView.setTag(holder);
-
         }else{
             holder = (ViewHolder) convertView.getTag();
         }
-        //pega o nome de usuário do usuário atual (necessidade de verificar a string de curtidas)
         getCurrentUsername();
-
-        //pega a string de likes
         getLikesString(holder);
-
-        //set o caption
         holder.caption.setText(getItem(position).getCaption());
-
-        //set Tags
         holder.mTags.setText(getItem(position).getTags());
 
         //set os comentarios
@@ -137,7 +124,6 @@ public class HomeFragmentPostViewListAdapter extends ArrayAdapter<Photo> {
                 b.putExtra("commentcount",comments.size());
                 b.putExtras(bundle);
                 mContext.startActivity(b);
-
             }
         });
 
@@ -153,7 +139,6 @@ public class HomeFragmentPostViewListAdapter extends ArrayAdapter<Photo> {
         final ImageLoader imageLoader = ImageLoader.getInstance();
         imageLoader.displayImage(getItem(position).getImage_Path(), holder.image);
 
-
         //pega a imagem de perfil e username
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         Query query = reference
@@ -164,7 +149,6 @@ public class HomeFragmentPostViewListAdapter extends ArrayAdapter<Photo> {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
-
                     Log.d(TAG, "onDataChange: found user: "
                             + singleSnapshot.getValue(Users.class).getUsername());
 
@@ -187,8 +171,6 @@ public class HomeFragmentPostViewListAdapter extends ArrayAdapter<Photo> {
                         }
                     });
 
-
-
                     holder.settings = singleSnapshot.getValue(Users.class);
                     holder.comment.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -202,40 +184,36 @@ public class HomeFragmentPostViewListAdapter extends ArrayAdapter<Photo> {
                         }
                     });
                 }
-
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
-
         if(reachedEndOfList(position)){
             loadMoreData();
         }
-
         return convertView;
     }
+
     private boolean reachedEndOfList(int position){
         return position == getCount() - 1;
     }
-    private void loadMoreData(){
 
+    private void loadMoreData(){
         try{
             mOnLoadMoreItemsListener = (OnLoadMoreItemsListener) getContext();
         }catch (ClassCastException e){
             Log.e(TAG, "loadMoreData: ClassCastException: " +e.getMessage() );
         }
-
         try{
             mOnLoadMoreItemsListener.onLoadMoreItems();
         }catch (NullPointerException e){
             Log.e(TAG, "loadMoreData: ClassCastException: " +e.getMessage() );
         }
     }
-    public class GestureListener extends GestureDetector.SimpleOnGestureListener{
 
+    public class GestureListener extends GestureDetector.SimpleOnGestureListener{
         ViewHolder mHolder;
         public GestureListener(ViewHolder holder) {
             mHolder = holder;
@@ -259,26 +237,21 @@ public class HomeFragmentPostViewListAdapter extends ArrayAdapter<Photo> {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
-
                         String keyID = singleSnapshot.getKey();
-
                         if(mHolder.likeByCurrentUser &&
                                 singleSnapshot.getValue(Likes.class).getUser_id()
                                         .equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
-
                             mReference.child("Photo")
                                     .child(mHolder.photo.getPhoto_id())
                                     .child("likes")
                                     .child(keyID)
                                     .removeValue();
-
                             mReference.child("User_Photo")
                                     .child(mHolder.photo.getUser_id())
                                     .child(mHolder.photo.getPhoto_id())
                                     .child("likes")
                                     .child(keyID)
                                     .removeValue();
-
                             mHolder.heart.toggleLike();
                             getLikesString(mHolder);
                         }
@@ -294,38 +267,34 @@ public class HomeFragmentPostViewListAdapter extends ArrayAdapter<Photo> {
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-
                 }
             });
-
             return true;
         }
     }
+
     private void addNewLike(final ViewHolder holder){
         Log.d(TAG, "addNewLike: adding new like");
 
         String newLikeID = mReference.push().getKey();
         Likes like = new Likes();
         like.setUser_id(FirebaseAuth.getInstance().getCurrentUser().getUid());
-
         mReference.child("Photo")
                 .child(holder.photo.getPhoto_id())
                 .child("likes")
                 .child(newLikeID)
                 .setValue(like);
-
         mReference.child("User_Photo")
                 .child(holder.photo.getUser_id())
                 .child(holder.photo.getPhoto_id())
                 .child("likes")
                 .child(newLikeID)
                 .setValue(like);
-
         holder.heart.toggleLike();
         getLikesString(holder);
         addLikeNotification(holder.photo.getUser_id(),holder.photo.getPhoto_id());
-
     }
+
     private void getCurrentUsername(){
         Log.d(TAG, "getCurrentUsername: retrieving users");
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
@@ -344,7 +313,6 @@ public class HomeFragmentPostViewListAdapter extends ArrayAdapter<Photo> {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.d(TAG, "getCurrentUsername: query cancelled.");
-
             }
         });
     }
@@ -362,7 +330,6 @@ public class HomeFragmentPostViewListAdapter extends ArrayAdapter<Photo> {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     holder.users = new StringBuilder();
                     for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
-
                         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
                         Query query = reference
                                 .child("Users")
@@ -374,7 +341,6 @@ public class HomeFragmentPostViewListAdapter extends ArrayAdapter<Photo> {
                                 for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
                                     Log.d(TAG, "onDataChange: found like: " +
                                             singleSnapshot.getValue(Users.class).getUsername());
-
                                     holder.users.append(singleSnapshot.getValue(Users.class).getUsername());
                                     holder.users.append(",");
                                 }
@@ -384,7 +350,6 @@ public class HomeFragmentPostViewListAdapter extends ArrayAdapter<Photo> {
                                         holder.users.toString());
                                 Log.d(TAG, "onDataChange: getLikesString: currentUsername:" +
                                         currentUsername);
-
 
                                 if(holder.users.toString().contains(currentUsername + ",")){
                                     holder.likeByCurrentUser = true;
@@ -404,7 +369,6 @@ public class HomeFragmentPostViewListAdapter extends ArrayAdapter<Photo> {
                                     holder.likesString = "Curtido por " + splitUsers[0]
                                             + ", " + splitUsers[1]
                                             + " e " + splitUsers[2];
-
                                 }
                                 else if(length == 4){
                                     holder.likesString = "Curtido por " + splitUsers[0]
@@ -424,7 +388,6 @@ public class HomeFragmentPostViewListAdapter extends ArrayAdapter<Photo> {
 
                             @Override
                             public void onCancelled(DatabaseError databaseError) {
-
                             }
                         });
                     }
@@ -437,7 +400,6 @@ public class HomeFragmentPostViewListAdapter extends ArrayAdapter<Photo> {
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-
                 }
             });
         }catch (NullPointerException e){
@@ -447,6 +409,7 @@ public class HomeFragmentPostViewListAdapter extends ArrayAdapter<Photo> {
             setupLikesString(holder, holder.likesString);
         }
     }
+
     private void setupLikesString(final ViewHolder holder, String likesString){
         Log.d(TAG, "setupLikesString: likes string:" + holder.likesString);
 
@@ -472,8 +435,8 @@ public class HomeFragmentPostViewListAdapter extends ArrayAdapter<Photo> {
             });
         }
         holder.likes.setText(likesString);
-
     }
+
     /**
      * Retorna uma string representando o número de dias atrás em que a postagem foi feita
      * @return
@@ -499,15 +462,11 @@ public class HomeFragmentPostViewListAdapter extends ArrayAdapter<Photo> {
     }
     private void addLikeNotification(String userid,String postid){
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Notifications");
-
         HashMap<String, Object> hashMappp = new HashMap<>();
         hashMappp.put("userid", FirebaseAuth.getInstance().getCurrentUser().getUid());
         hashMappp.put("postid", postid);
         hashMappp.put("text", "liked your post");
         hashMappp.put("ispost", true);
         reference.child(userid).push().setValue(hashMappp);
-
     }
-
-
 }

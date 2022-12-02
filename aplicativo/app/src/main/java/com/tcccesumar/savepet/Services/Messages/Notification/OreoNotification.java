@@ -14,7 +14,6 @@ public class OreoNotification extends ContextWrapper {
 
     private static final String CHANNEL_ID = "com.unicesumar.savepet";
     private static final String CHANNEL_NAME = "SavePet";
-
     private NotificationManager notificationManager;
 
     public OreoNotification(Context base) {
@@ -26,20 +25,16 @@ public class OreoNotification extends ContextWrapper {
 
     @TargetApi(Build.VERSION_CODES.O)
     private void createChannel() {
-
         NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
         channel.enableLights(true);
         channel.enableVibration(true);
         channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
-
         getManager().createNotificationChannel(channel);
-
     }
     public NotificationManager getManager(){
         if (notificationManager == null){
             notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         }
-
         return  notificationManager;
     }
 

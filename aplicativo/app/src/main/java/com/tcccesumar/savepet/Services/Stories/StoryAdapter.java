@@ -42,7 +42,6 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
         if(viewType==0){
             View view = LayoutInflater.from(mcontext)
                     .inflate(R.layout.add_story_items,parent,false);
@@ -51,21 +50,17 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
             View view = LayoutInflater.from(mcontext)
                     .inflate(R.layout.story_items,parent,false);
             return new StoryAdapter.ViewHolder(view);
-
         }
     }
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
-
         final Story story = mstory.get(i);
-
         userInfo(viewHolder, story.getUserid(), i);
 
         if (viewHolder.getAdapterPosition() != 0) {
             seenStory(viewHolder, story.getUserid());
         }
-
         if (viewHolder.getAdapterPosition() == 0){
             myStory(viewHolder.storyAddText, viewHolder.storyAdd, false);
         }
@@ -82,7 +77,6 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
                 }
             }
         });
-
     }
 
     @Override
@@ -91,13 +85,11 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-
         public ImageView storyPhoto,storyAdd,storyPhotoSeen;
         public TextView storyUsername,storyAddText;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
             storyPhoto = itemView.findViewById(R.id.addStoryItems_storyPhoto);
             storyAdd = itemView.findViewById(R.id.addStoryItems_addstory);
             storyPhotoSeen = itemView.findViewById(R.id.storyItems_storyPhotoSeen);
@@ -115,7 +107,6 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
     }
 
     private void userInfo(final ViewHolder viewHolder, String userid, final int pos){
-
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(userid);
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -130,13 +121,11 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
     }
 
     private void myStory(final TextView textView, final ImageView imageView, final boolean click){
-
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Story")
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -189,7 +178,6 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
     }
@@ -221,7 +209,6 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
     }
