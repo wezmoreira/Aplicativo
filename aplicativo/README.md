@@ -4,6 +4,10 @@
 
 ## Aplicativo Android 
 
+## Download APK (Alpha)
+* [SavePet Aplicativo](https://drive.google.com/file/d/15AHLmTzy5HUgeJ2kxx8JFvKmZW1dtDlZ/view?usp=sharing)
+
+
 ## Tecnologias Utilizadas
 * Android Studio
 * Firebase
@@ -51,5 +55,4 @@
  ##### Para utilizar o Chat voce precisa seguir outro usuario e ele aparecerá na lista de amigos!
   <img src="https://user-images.githubusercontent.com/49487566/205316411-511e9ac2-1b2d-46a2-a0b0-172874e97e95.png" alt="Chat" width = "220">
 
- ## Download APK (Alpha)
-* (ADICIONAR LINK)
+
