@@ -27,6 +27,7 @@
 
 ## Screenshots
 #### Criar Conta
+##### Para criar a conta é necessário verificar e confirmar o email utilizado no cadastro! (Verificar a caixa de SPAM!)
   <img src="https://user-images.githubusercontent.com/49487566/205317057-65a8c5ba-6f08-4d05-a347-b655c6975594.png" alt="Registrar" width = "220">
 
 
